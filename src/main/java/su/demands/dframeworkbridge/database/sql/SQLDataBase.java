@@ -148,7 +148,7 @@ public class SQLDataBase implements IDataBase {
             for (int i=1; i<=numColumns; i++) {
                 String column_name = rsmd.getColumnName(i);
                 if (obj.has(column_name))
-                    obj.getAsJsonArray(column_name).add(gson.toJsonTree(rs.getObject(column_name)));
+                    obj.getAsJsonArray(column_name).add(gson.toJsonTree(rs.getString(column_name)));
                 else
                     obj.add(column_name,new JsonArray());
             }

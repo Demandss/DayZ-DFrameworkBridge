@@ -86,7 +86,10 @@ public class RestApiSQLDB {
         SQLDataBase dataBase = dataBases.get(modification);
 
         if (dataBase == null)
+        {
+            LOGGER.error(String.format("No connection found for \"%s\"",modification));
             return "failed";
+        }
 
         String result = dataBase.update(request);
 
