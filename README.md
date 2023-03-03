@@ -16,7 +16,8 @@ The project is a RestApi bridge for DFramework to work with things that cannot b
 
 Downloading 
  - [jdk-17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html);
- - the latest release.
+ - DFrameworkBridge the latest release.
+
 After you need to open the command line in the folder with DFrameworkBridge-X.Y.Z-SNAPSHOT.jar and use the command.
 
 ```cmd
