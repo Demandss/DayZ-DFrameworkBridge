@@ -18,7 +18,7 @@ public class RestApiSQLDB {
 
     private static final HashMap<String, SQLDataBase> dataBases = new HashMap<>();
 
-    @GetMapping("/connect")
+    @PostMapping("/connect")
     public String createConnection(@RequestParam("mod") String modification, @RequestParam("type") String type, @Param(value = "file") String file, @Param(value = "host") String host, @Param(value = "user") String user, @Param(value = "password") String password) {
         String result = "failed";
 
@@ -49,7 +49,7 @@ public class RestApiSQLDB {
         return result;
     }
 
-    @GetMapping(value = "/query")
+    @PostMapping(value = "/query")
     public ResponseEntity<String> query(@RequestParam("mod") String modification, @RequestParam("type") String resultType, @RequestParam("request") String request) {
         SQLDataBase dataBase = dataBases.get(modification);
 
@@ -81,7 +81,7 @@ public class RestApiSQLDB {
         return ResponseEntity.ok().headers(responseHeaders).body(result);
     }
 
-    @GetMapping("/update")
+    @PostMapping("/update")
     public String update(@RequestParam("mod") String modification, @RequestParam("request") String request) {
         SQLDataBase dataBase = dataBases.get(modification);
 
