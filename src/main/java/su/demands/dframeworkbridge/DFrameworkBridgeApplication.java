@@ -1,26 +1,30 @@
 package su.demands.dframeworkbridge;
 
-import lombok.SneakyThrows;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Paths;
 
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 public class DFrameworkBridgeApplication {
 
-    @SneakyThrows
-    public static void main(String[] args) {
+
+    public static void main(String[] args) throws IOException, URISyntaxException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("Enter path to data files or \"-\" for set default path");
         String line = reader.readLine();
 
-        if (line.equalsIgnoreCase("-"))
-            Reference.DATA_PATH = Paths.get(DFrameworkBridgeApplication.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParent().toString();
+        if (line.equalsIgnoreCase("-")) {
+            String dataPath = DFrameworkBridgeApplication.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+            Reference.DATA_PATH = dataPath.substring(6,dataPath.lastIndexOf("DFrameworkBridge"));
+        }
         else
         {
             File dir = new File(line);
@@ -34,8 +38,6 @@ public class DFrameworkBridgeApplication {
                     System.exit(0);
                 }
         }
-
-        Reference.DATA_PATH = "E:\\colum\\Desktop\\JDBCTEST\\";
 
         SpringApplication.run(DFrameworkBridgeApplication.class, args);
     }
