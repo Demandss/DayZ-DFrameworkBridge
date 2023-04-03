@@ -1,10 +1,7 @@
 package su.demands.dframeworkbridge.database.sql;
 
 import com.google.gson.*;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
-import lombok.SneakyThrows;
+import lombok.*;
 import org.apache.logging.log4j.Logger;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import su.demands.dframeworkbridge.Reference;
@@ -98,7 +95,9 @@ public class SQLDataBase implements IDataBase {
         try {
             statement.executeLargeUpdate(sql);
         } catch (SQLException e) {
-            return e.getMessage();
+            val errMsg = e.getMessage();
+            LOGGER.error(errMsg);
+            return errMsg;
         }
         return "Success";
     }
@@ -115,7 +114,7 @@ public class SQLDataBase implements IDataBase {
         int columnCount = rsmd.getColumnCount();
         StringBuilder result = new StringBuilder();
         for (int i = 1; i <= columnCount; i++) {
-            result.append(rsmd.getColumnName(i));
+            result.append("\"").append(rsmd.getColumnName(i)).append("\"");
             if (i < columnCount) {
                 result.append(",");
             }
@@ -124,7 +123,7 @@ public class SQLDataBase implements IDataBase {
 
         while (rs.next()) {
             for (int i = 1; i <= columnCount; i++) {
-                result.append(rs.getString(i));
+                result.append("\"").append(rs.getString(i)).append("\"");
                 if (i < columnCount) {
                     result.append(",");
                 }
@@ -147,10 +146,16 @@ public class SQLDataBase implements IDataBase {
             int numColumns = rsmd.getColumnCount();
             for (int i=1; i<=numColumns; i++) {
                 String column_name = rsmd.getColumnName(i);
-                if (obj.has(column_name))
-                    obj.getAsJsonArray(column_name).add(gson.toJsonTree(rs.getString(column_name)));
-                else
+
+                if (!obj.has(column_name))
                     obj.add(column_name,new JsonArray());
+
+                String columData = rs.getString(column_name);
+
+                if (columData == null)
+                    columData = "NULL";
+
+                obj.getAsJsonArray(column_name).add(gson.toJsonTree(columData));
             }
         }
 

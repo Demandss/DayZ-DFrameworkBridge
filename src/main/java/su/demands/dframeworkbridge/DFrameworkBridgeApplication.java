@@ -16,12 +16,12 @@ import java.nio.file.Paths;
 public class DFrameworkBridgeApplication {
 
 
-    public static void main(String[] args) throws IOException, URISyntaxException {
+    public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("Enter path to data files or \"-\" for set default path");
         String line = reader.readLine();
 
-        if (line.equalsIgnoreCase("-")) {
+        if (line.equalsIgnoreCase("-") || line.isEmpty()) {
             String dataPath = DFrameworkBridgeApplication.class.getProtectionDomain().getCodeSource().getLocation().getPath();
             Reference.DATA_PATH = dataPath.substring(6,dataPath.lastIndexOf("DFrameworkBridge"));
         }
@@ -31,7 +31,7 @@ public class DFrameworkBridgeApplication {
 
             if (dir.isDirectory())
                 if (dir.exists())
-                    Reference.DATA_PATH = line;
+                    Reference.DATA_PATH = dir.getPath() + "\\";
                 else
                 {
                     System.err.println("Directory not found");
